@@ -1,0 +1,8 @@
+services:
+  flight-api:
+    build: ./flight-api
+    ports: ["8080:8080"]
+  flight-board:
+    build: ./flight-board
+    ports: ["3000:80"]
+    depends_on: [flight-api]
