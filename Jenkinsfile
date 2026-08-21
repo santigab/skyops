@@ -7,19 +7,19 @@ pipeline {
     stages {
         stage('Build & Test') {
             steps {
-                dir('flight-api') { sh 'mvn -B clean verify' }
+                dir('flight-api') { sh './mvnw -B clean verify' }
             }
         }
         stage('Quality Gate — SonarQube') {
             steps {
                 dir('flight-api') {
-                    sh 'mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -Dsonar.token=$SONAR_TOKEN'
+                    sh './mvnw sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -Dsonar.token=$SONAR_TOKEN'
                 }
             }
         }
         stage('Publish artifact — Nexus') {
             steps {
-                dir('flight-api') { sh 'mvn deploy -DskipTests -DaltDeploymentRepository=nexus::http://nexus:8081/repository/maven-releases/' }
+                dir('flight-api') { sh './mvnw deploy -DskipTests -DaltDeploymentRepository=nexus::http://nexus:8081/repository/maven-releases/' }
             }
         }
         stage('Docker build') {
