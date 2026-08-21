@@ -10,13 +10,15 @@ pipeline {
                 dir('flight-api') { sh './mvnw -B clean verify' }
             }
         }
-        // stage('Quality Gate — SonarQube') {
-        //     steps {
-        //         dir('flight-api') {
-        //             sh './mvnw sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -Dsonar.token=$SONAR_TOKEN'
-        //         }
-        //     }
-        // }
+        stage('Quality Gate — SonarQube') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    dir('flight-api') {
+                        sh './mvnw sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -Dsonar.token=$SONAR_TOKEN'
+                    }
+                }
+            }
+        }
         // stage('Publish artifact — Nexus') {
         //     steps {
         //         dir('flight-api') { sh './mvnw deploy -DskipTests -DaltDeploymentRepository=nexus::http://nexus:8081/repository/maven-releases/' }
